@@ -386,6 +386,38 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 .wcard:not(.type-video) .vsearch-txt{color:var(--gun3)}
 .vsearch-txt strong{color:rgba(255,255,255,.85);font-weight:600}
 .wcard:not(.type-video) .vsearch-txt strong{color:var(--gun)}
+
+/* ─── LOG / CALENDAR ────────────────────────────── */
+.log-cal{margin-bottom:20px}
+.log-cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.log-cal-title{font-size:16px;font-weight:700;color:var(--gun)}
+.log-cal-nav{display:flex;gap:8px}
+.log-cal-nav button{background:none;border:1px solid var(--rule);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:13px;color:var(--gun3)}
+.log-day-labels{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px}
+.log-day-label{text-align:center;font-size:10px;font-weight:600;color:var(--gun3);padding:4px 0;text-transform:uppercase}
+.log-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.log-day{aspect-ratio:1;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:var(--gun3);background:var(--bone2);cursor:pointer;transition:all .15s;position:relative}
+.log-day.today{border:2px solid var(--moon);color:var(--moon);font-weight:700}
+.log-day.worked-out{background:var(--moon);color:#fff;font-weight:700}
+.log-day.worked-out.today{background:var(--moon);border-color:#fff}
+.log-day.empty{background:transparent;cursor:default}
+.log-day .log-dot{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.6);position:absolute;bottom:3px}
+.log-stats{display:flex;gap:12px;margin-bottom:20px}
+.log-stat{flex:1;background:var(--gun);border-radius:12px;padding:14px;text-align:center}
+.log-stat-num{font-size:24px;font-weight:700;color:#fff;font-family:'DM Serif Display',serif}
+.log-stat-label{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px}
+.log-section-title{font-size:13px;font-weight:700;color:var(--gun3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.log-entry{background:#fff;border-radius:12px;padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;border:1px solid var(--rule)}
+.log-entry-date{font-size:11px;font-weight:600;color:var(--gun3);min-width:36px;text-align:center;line-height:1.2}
+.log-entry-day{font-size:9px;color:var(--lion);text-transform:uppercase}
+.log-entry-info{flex:1}
+.log-entry-title{font-size:14px;font-weight:600;color:var(--gun)}
+.log-entry-meta{font-size:12px;color:var(--gun3)}
+.log-entry-icon{font-size:20px}
+
+/* Checkin complete button */
+.checkin-done-btn{width:100%;padding:16px;background:var(--moon);color:#fff;border:none;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:12px;transition:opacity .15s}
+.checkin-done-btn:active{opacity:.8}
 </style>
 </head>
 <body>
@@ -663,83 +695,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
       </div>
       <div class="ci-card">
         <div class="ci-lbl">Anything specific? <span style="font-weight:400;font-size:11px;color:var(--gun3)">optional</span></div>
-        <textarea id="ci-note" placeholder="e.g. want to do pilates today, avoiding squats…" style="border:none;padding:0;background:transparent;font-size:13px;color:var(--gun);resize:none;height:60px;outline:none;width:100%"></textarea>
-      </div>
-    </div>
-
-    <div class="gen-section">
-      <button class="gen-btn" id="gbtn" data-action="gen">Generate today's plan</button>
-    </div>
-  </div>
-
-  <!-- Profile page -->
-  <div class="app-page" id="page-profile" style="overflow-y:auto">
-    <div class="today-hero">
-      <div class="app-bar" style="padding:52px 20px 0;background:transparent;position:relative">
-        <div class="app-bar-title">My <em style="font-style:italic;color:var(--blue)">profile</em></div>
-      </div>
-    </div>
-    <div style="padding:16px 20px 0">
-      <button class="prof-edit-btn" data-action="reset" style="margin:0;width:100%">Edit setup</button>
-    </div>
-    <div id="prof-content" style="padding:16px 20px 32px"></div>
-  </div>
-
-  <!-- Bottom nav -->
-  <div class="bottom-nav">
-    <button class="bnav-item active" id="bn-today" data-action="navtoday">
-      <div class="bnav-icon">&#9675;</div>
-      <span>Today</span>
-    </button>
-    <button class="bnav-item" id="bn-profile" data-action="navprofile">
-      <div class="bnav-icon">&#9728;</div>
-      <span>Profile</span>
-    </button>
-  </div>
-</div>
-
-<!-- ════════════════════════════════════════════════
-     PLAN FULL-SCREEN
-════════════════════════════════════════════════ -->
-<div class="screen hidden-right" id="plan-screen">
-  <div class="plan-header">
-    <div>
-      <div class="plan-title">Today's plan</div>
-      <div class="plan-date" id="plan-date-txt"></div>
-    </div>
-    <div style="display:flex;gap:8px;align-items:center">
-      <button class="plan-redo" data-action="gen">Redo</button>
-      <button class="plan-back" data-action="planback">&#8592; Back</button>
-    </div>
-  </div>
-  <div class="plan-badges" id="pbadges"></div>
-
-  <!-- Tab switcher -->
-  <div class="plan-tabs" id="plan-tabs" style="display:none">
-    <div class="ptab active" id="tab-video" data-action="tabvideo">
-      Follow-along
-      <span>creator video</span>
-    </div>
-    <div class="ptab" id="tab-workout" data-action="tabworkout">
-      Workout plan
-      <span>exercises only</span>
-    </div>
-  </div>
-
-  <div class="plan-body" id="plan-body">
-    <div class="plan-loading" id="plan-loading">Building your plan<span class="dot-a"></span></div>
-    <div id="tab-video-content" style="display:none">
-      <div class="wl" id="wlist-video"></div>
-      <div id="why-block-video"></div>
-    </div>
-    <div id="tab-workout-content" style="display:none">
-      <div class="wl" id="wlist-workout"></div>
-      <div id="why-block-workout"></div>
-    </div>
-  </div>
-</div>
-
-<script>
+        <textarea id="ci-note" placeholder="e.g. want to do pilates today, avoiding squats…" style="border:none;padding:0;background:transparent;font-size:13px;color:var(--gun)
 /* ================================================
    DATA
 ================================================ */
@@ -1527,6 +1483,26 @@ function bindEvents(){
     'planback':function(){goScreen('app-screen','plan-screen');},
     'navtoday':function(){showPage('today');},
     'navprofile':function(){showPage('profile');},
+    'navlog':function(){showPage('log');showLogPage();},
+    'logdone':function(){
+      // Save today's workout
+      var planData = typeof rawPlan !== 'undefined' ? JSON.parse(rawPlan) : {};
+      var videoplan = planData.videoplan || planData || {};
+      saveLog({
+        focus: videoplan.focus || 'Workout',
+        intensity: videoplan.intensity || 'Moderate',
+        duration: videoplan.total_duration || '30 min'
+      });
+      // Show success feedback
+      var btn = document.getElementById('log-done-btn');
+      if(btn){ btn.textContent = '✓ Logged!'; btn.style.background = 'var(--gun)'; }
+      // Go to log page after 1s
+      setTimeout(function(){ 
+        goScreen('app-screen','plan-screen');
+        showPage('log');
+        showLogPage();
+      }, 800);
+    },
     'ovr':function(){toggleOvr();},
     'tabvideo':function(){switchTab('video');},
     'tabworkout':function(){switchTab('workout');},
@@ -1586,6 +1562,209 @@ function bindEvents(){
   if(genderEl) genderEl.addEventListener('change',onGender);
   // ci-add enter key
   var ciAdd=document.getElementById('ci-add');
+  if(ciAdd) ciAdd.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();addCI();}});
+}
+
+
+// ── WORKOUT LOG ─────────────────────────────────
+var workoutLog = {};  // {date_str: {focus, duration, intensity}}
+
+function loadLog(){
+  try{
+    var saved = localStorage.getItem('fitcheck_log');
+    if(saved) workoutLog = JSON.parse(saved);
+  }catch(e){}
+}
+
+function saveLog(entry){
+  var today = new Date();
+  var key = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  workoutLog[key] = entry;
+  try{ localStorage.setItem('fitcheck_log', JSON.stringify(workoutLog)); }catch(e){}
+  renderCalendar(today.getFullYear(), today.getMonth());
+}
+
+var calYear, calMonth;
+
+function renderCalendar(year, month){
+  calYear = year; calMonth = month;
+  var cal = document.getElementById('log-cal');
+  if(!cal) return;
+  
+  var monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var today = new Date();
+  
+  document.getElementById('log-month-txt').textContent = monthNames[month]+' '+year;
+  
+  // Count workouts this month
+  var monthCount = Object.keys(workoutLog).filter(function(k){
+    var d = k.split('-');
+    return parseInt(d[0])===year && parseInt(d[1])-1===month;
+  }).length;
+  
+  // Total streak
+  var streak = 0;
+  var d = new Date(today);
+  while(true){
+    var key = d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+    if(workoutLog[key]){ streak++; d.setDate(d.getDate()-1); } else break;
+  }
+  
+  // Stats
+  document.getElementById('log-stats').innerHTML =
+    '<div class="log-stat"><div class="log-stat-num">'+monthCount+'</div><div class="log-stat-label">This month</div></div>'+
+    '<div class="log-stat"><div class="log-stat-num">'+streak+'</div><div class="log-stat-label">Day streak 🔥</div></div>'+
+    '<div class="log-stat"><div class="log-stat-num">'+Object.keys(workoutLog).length+'</div><div class="log-stat-label">Total workouts</div></div>';
+  
+  // Build calendar
+  var firstDay = new Date(year, month, 1).getDay();
+  var daysInMonth = new Date(year, month+1, 0).getDate();
+  
+  var html = '<div class="log-cal-header">'+
+    '<div class="log-cal-title">'+monthNames[month]+' '+year+'</div>'+
+    '<div class="log-cal-nav">'+
+    '<button onclick="renderCalendar(calMonth===0?calYear-1:calYear,calMonth===0?11:calMonth-1)">&#8249;</button>'+
+    '<button onclick="renderCalendar(calMonth===11?calYear+1:calYear,calMonth===11?0:calMonth+1)">&#8250;</button>'+
+    '</div></div>';
+  
+  html += '<div class="log-day-labels">';
+  dayNames.forEach(function(d){ html += '<div class="log-day-label">'+d+'</div>'; });
+  html += '</div><div class="log-grid">';
+  
+  // Empty cells
+  for(var i=0;i<firstDay;i++) html += '<div class="log-day empty"></div>';
+  
+  // Days
+  for(var day=1;day<=daysInMonth;day++){
+    var key = year+'-'+(month+1)+'-'+day;
+    var isToday = (today.getFullYear()===year&&today.getMonth()===month&&today.getDate()===day);
+    var didWorkout = !!workoutLog[key];
+    var cls = 'log-day'+(isToday?' today':'')+(didWorkout?' worked-out':'');
+    var dot = didWorkout&&!isToday?'<div class="log-dot"></div>':'';
+    html += '<div class="'+cls+'">'+day+dot+'</div>';
+  }
+  html += '</div>';
+  cal.innerHTML = html;
+  
+  // Recent workouts
+  var recent = Object.keys(workoutLog).sort().reverse().slice(0,5);
+  var recHtml = recent.length>0?'<div class="log-section-title">Recent workouts</div>':'';
+  recent.forEach(function(k){
+    var parts = k.split('-');
+    var d2 = new Date(parseInt(parts[0]),parseInt(parts[1])-1,parseInt(parts[2]));
+    var dayN = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d2.getDay()];
+    var w = workoutLog[k];
+    var icon = w.intensity==='Light'?'🧘':w.intensity==='High'?'🔥':'💪';
+    recHtml += '<div class="log-entry">'+
+      '<div class="log-entry-date"><div>'+parts[2]+'</div><div class="log-entry-day">'+dayN+'</div></div>'+
+      '<div class="log-entry-info"><div class="log-entry-title">'+(w.focus||'Workout')+'</div>'+
+      '<div class="log-entry-meta">'+(w.intensity||'')+(w.duration?' · '+w.duration:'')+'</div></div>'+
+      '<div class="log-entry-icon">'+icon+'</div>'+
+    '</div>';
+  });
+  if(recHtml) document.getElementById('log-recent').innerHTML = recHtml;
+}
+
+function showLogPage(){
+  var today = new Date();
+  renderCalendar(today.getFullYear(), today.getMonth());
+}
+
+function loadSaved(){
+  try{
+    var saved=localStorage.getItem('fitcheck_profile');
+    var savedSel=localStorage.getItem('fitcheck_sel');
+    if(!saved) return false;
+    P=JSON.parse(saved);
+    if(savedSel){
+      var sel=JSON.parse(savedSel);
+      SEL.goal=sel.goal||[];
+      SEL.workout=sel.workout||[];
+      SEL.infl=sel.infl||[];
+      SEL.custInfl=sel.custInfl||[];
+      SEL.equip=sel.equip||[];
+    }
+    // Restore greeting
+    var h=new Date().getHours();
+    var greetEl=document.getElementById('greeting-txt');
+    if(greetEl) greetEl.innerHTML=h<12?'Good <em style="font-style:italic;color:var(--blue)">morning</em>':h<17?'Good <em style="font-style:italic;color:var(--blue)">afternoon</em>':'Good <em style="font-style:italic;color:var(--blue)">evening</em>';
+    var dateEl=document.getElementById('date-txt');
+    if(dateEl) dateEl.textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+    // Cycle banner
+    if(P.gender==='female'&&P.lp){
+      var cyc=calcCyc(P.lp,P.cl||28,P.pd||5);
+      if(cyc) showCycBanner(cyc);
+    }
+    return true;
+  }catch(e){ return false; }
+}
+
+function initApp(){
+  bindEvents();
+  loadLog();
+  buildPills('goal-pills',GOALS,'goal');
+  buildPills('workout-pills',WORKOUTS,'workout');
+  buildPills('equip-pills',EQUIP,'equip');
+  renderI(INFLS);
+  // If returning user, skip setup and go straight to today
+  if(loadSaved()){
+    document.getElementById('s-step1').classList.remove('active');
+    document.getElementById('s-step1').classList.add('hidden-left');
+    document.getElementById('app-screen').classList.remove('hidden-right');
+    document.getElementById('app-screen').classList.add('active');
+  }
+}
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',initApp);
+} else {
+  initApp();
+}
+// Target BF pills
+(function(){
+  var t=document.getElementById('tbf-pills');
+  if(!t)return;
+  [['~10%','10'],['~15%','15'],['~18%','18'],['~20%','20'],['~22%','22'],['~25%','25']].forEach(function(item){
+    var p=document.createElement('div');p.className='pill';p.textContent=item[0];
+    p.style.fontSize='12px';p.style.padding='6px 12px';
+    p.onclick=function(){
+      document.querySelectorAll('#tbf-pills .pill').forEach(function(x){x.classList.remove('on');});
+      p.classList.add('on');document.getElementById('target-bf').value=item[1];
+    };
+    t.appendChild(p);
+  });
+})();
+// ci-add enter key
+(function(){
+  var el=document.getElementById('ci-add');
+  if(el)el.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();addCI();}});
+})();
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',initApp);
+} else {
+  initApp();
+}
+// Target BF pills
+(function(){
+  var t=document.getElementById('tbf-pills');
+  if(!t)return;
+  [['~10%','10'],['~15%','15'],['~18%','18'],['~20%','20'],['~22%','22'],['~25%','25']].forEach(function(item){
+    var p=document.createElement('div');p.className='pill';p.textContent=item[0];
+    p.style.fontSize='12px';p.style.padding='6px 12px';
+    p.onclick=function(){
+      document.querySelectorAll('#tbf-pills .pill').forEach(function(x){x.classList.remove('on');});
+      p.classList.add('on');document.getElementById('target-bf').value=item[1];
+    };
+    t.appendChild(p);
+  });
+})();
+// ci-add enter key
+(function(){
+  var el=document.getElementById('ci-add');
+  if(el)el.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();addCI();}});
+})();
+
+lementById('ci-add');
   if(ciAdd) ciAdd.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();addCI();}});
 }
 
