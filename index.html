@@ -695,7 +695,13 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
       </div>
       <div class="ci-card">
         <div class="ci-lbl">Anything specific? <span style="font-weight:400;font-size:11px;color:var(--gun3)">optional</span></div>
-        <textarea id="ci-note" placeholder="e.g. want to do pilates today, avoiding squats…" style="border:none;padding:0;background:transparent;font-size:13px;color:var(--gun)
+        <textarea id="ci-note" placeholder="e.g. want to do pilates today, avoiding squats…" style="border:none;padding:0;background:transparent;font-size:13px;color:var(--gun)"></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
 /* ================================================
    DATA
 ================================================ */
@@ -1561,9 +1567,7 @@ function bindEvents(){
   var genderEl=document.querySelector('[data-onchange="gender"]');
   if(genderEl) genderEl.addEventListener('change',onGender);
   // ci-add enter key
-  var ciAdd=document.getElementById('ci-add');
-  if(ciAdd) ciAdd.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();addCI();}});
-}
+  var ciAdd=document.getE
 
 
 // ── WORKOUT LOG ─────────────────────────────────
@@ -1764,9 +1768,7 @@ if(document.readyState==='loading'){
   if(el)el.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();addCI();}});
 })();
 
-lementById('ci-add');
-  if(ciAdd) ciAdd.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();addCI();}});
-}
+
 
 function loadSaved(){
   try{
@@ -1859,7 +1861,7 @@ if(document.readyState==='loading'){
   var el=document.getElementById('ci-add');
   if(el)el.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();addCI();}});
 })();
-
+}
 </script>
 
 <script>
